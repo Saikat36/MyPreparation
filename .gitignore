@@ -4,4 +4,6 @@
 *.ilk
 *.pdb
 *.out
-.vscode/ # Or specific files like .vscode/settings.json, .vscode/tasks.json if they are personal
+.vscode/ 
+
+# Or specific files like .vscode/settings.json, .vscode/tasks.json if they are personal
