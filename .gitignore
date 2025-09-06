@@ -1,0 +1,7 @@
+*.exe
+*.o    # Object files
+*.obj  # Object files
+*.ilk
+*.pdb
+*.out
+.vscode/ # Or specific files like .vscode/settings.json, .vscode/tasks.json if they are personal
