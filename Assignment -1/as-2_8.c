@@ -14,5 +14,6 @@ int main()
     printf("%c - %d\n", c, c);
 
     printf("\n");
+
     return 0;
 }

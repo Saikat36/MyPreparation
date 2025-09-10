@@ -1,9 +1,47 @@
+# Compiled binaries
 *.exe
-*.o    # Object files
-*.obj  # Object files
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Debug / profiling files
 *.ilk
 *.pdb
-*.out
-.vscode/ 
+*.idb
+*.stackdump
 
-# Or specific files like .vscode/settings.json, .vscode/tasks.json if they are personal
+# Libraries
+*.so
+*.a
+*.dll
+*.lib
+
+# IDE / Editor settings
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*.log
+
+# Build system files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+build/
+Debug/
+Release/
+
+# Backup / temp files
+*~
+*.tmp
+*.bak
+*.old
+
+# System-specific files
+.DS_Store
+Thumbs.db
