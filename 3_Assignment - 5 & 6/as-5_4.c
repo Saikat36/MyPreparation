@@ -3,12 +3,32 @@
 /* 4. Write a program to check whether a given number is an even number or an odd number without using % operator. */
 
 /*  This wil work also ⤵️
+
+#include<stdio.h>
+
+int main()
+{
+    int x;
+    printf("Enter a no : ");
+    scanf("%d",&x);
+
 {
     if (x & 1)
         printf("The number is odd\n");
     else
         printf("The number is even\n");
 }
+    return 0;
+}
+
+Test For Even Number -               Test for Odd Number
+
+    0110  -> 6                          0101  -> 5
+  & 0001  -> 1                        & 0001  -> 1
+  ----------                          ----------  
+    0000  -> 0                          0001  -> 1
+
+
 */
 
 #include<stdio.h>

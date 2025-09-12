@@ -11,8 +11,8 @@ int main()
     // s[0] = 'B';      // ❌ crash (undefined behavior)
     arr[0] = 'B';       // ✅ works
 
-    printf("s: %s\n", s);
-    printf("arr: %s\n", arr);
+    printf("s: %s\n", s);       // s: A
+    printf("arr: %s\n", arr);   // arr: B
 
     return 0;
 }
