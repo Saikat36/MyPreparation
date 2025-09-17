@@ -9,7 +9,7 @@ int main()
 {
     char x = 'A';
     x++;
-    printf("%c",x);
+    printf("%c",x);     // B
 
     return 0;
 }
