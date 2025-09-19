@@ -1,5 +1,5 @@
 
-
+ 
 #include <stdio.h>
 int main() 
 {
@@ -9,6 +9,12 @@ int main()
     printf("%p\n", arr);     // address of first element
     printf("%c\n", arr[0]);  // 'A'
     printf("%c\n", arr[1]);  // 'B'
+
+    printf("_____________\n\n");
+
+    printf("%c\n",  *s);         // 'A'
+    printf("%c\n", *(&s[1]));    // 'B'
+    printf("%c\n", *(s+2));      // '\0'
 
     return 0;
 }
@@ -34,7 +40,7 @@ arr ──► [ arr[0] = 'A' ] [ arr[1] = 'B' ] [ arr[2] = '\0' ]
                 |                |                |
             *(arr)          *(arr+1)          *(arr+2)
 
-            
+
 
 --------------------------Character Indiaxing----------------------
 
