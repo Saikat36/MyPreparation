@@ -7,13 +7,26 @@
 
 int main()
 {
-    int num;
+    int num, i;
 
-    for (int i = 1; i <= 3; i++)
+    for (i = 1; i <= 3; i++)
     {
         printf("Chance %d: Enter an even number: ", i);
         scanf(" %d",&num);
         
+        if(num%2==0)
+        {
+            break;
+        }
     }
     
+    if(i==4)
+    {
+        printf("Game Over");
+    }
+    else
+    {
+        printf("You Win");
+    }
+
 }
