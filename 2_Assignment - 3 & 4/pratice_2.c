@@ -1,5 +1,5 @@
 
- 
+
 #include <stdio.h>
 int main() 
 {
@@ -12,8 +12,8 @@ int main()
 
     printf("_____________\n\n");
 
-    printf("%c\n",  *s);         // 'A'
-    printf("%c\n", *(&s[1]));    // 'B'
+    printf("%c\n",  s );         // 'A'     s[0] == *(&s[0]) == *(s) == A
+    printf("%c\n", *(&s[1]));    // 'B'     s[1] == *(&s[1]) == *(s+1) == B
     printf("%c\n", *(s+2));      // '\0'
 
     return 0;

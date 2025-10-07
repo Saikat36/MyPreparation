@@ -82,7 +82,7 @@ Address  | Content     | Meaning
 ✅ `arr`  
 - Stored in stack  
 - Own copy of `"Hello"`  
-- Writable — modifying `arr[0]` is valid.
+- Writable — modifying `arr[0] = 'B' ` is valid.
 
 ⚠️ `s`, `s1`, `s2`  
 - Stored in stack, but **they only hold addresses** of literals.  
@@ -92,10 +92,30 @@ Address  | Content     | Meaning
 
 ---
 
-### 🔍 WHY `s` and `s2` both point to 8000
-Because **string literals with identical content may be merged by the compiler**  
-(optimization called *string pooling*).  
-Hence, `"Hello"` is stored only **once**, and both `s` and `s2` point to it.
+🔍 WHY `s` and `s2` both point to 8000
+
+it looks like "Hello" appears twice,
+so you might expect two separate copies of "Hello" in memory.
+But actually... there’s usually only one.
+
+🧠 Reason — “String Literal Pooling” (a.k.a. Literal Merging)
+
+When you write the same string literal more than once in your program —
+like "Hello" here — the compiler sees that they are identical.
+
+So, to save memory, the compiler performs an optimization called
+🧩 String Literal Pooling (or Constant Merging).
+
+That means:  All identical string literals are stored only once in read-only memory,
+and all pointers to that literal refer to the same memory location.
+
+
+| Variable | Initialization | Points to Address | Literal content          |
+| -------- | -------------- | ----------------- | ------------------------ |
+| `s`      | `"Hello"`      | 8000              | 'H','e','l','l','o','\0' |
+| `s2`     | `"Hello"`      | 8000              | 'H','e','l','l','o','\0' |
+
+So both s and s2 point to the same memory block at address 8000.
 
 ---
 
