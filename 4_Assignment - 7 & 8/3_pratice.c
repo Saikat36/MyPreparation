@@ -34,8 +34,8 @@ int main()
 
 /* 
 
-            i = Lines    = row number
-            j = columns  = column number
+            i = Lines    = row number       = Outer loop
+            j = columns  = column number    = Inner loop
 
 
 i=1 → j = 1 2 3 4 5                     * * * * *
