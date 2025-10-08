@@ -14,8 +14,11 @@ int main()
     // s1[0] = 'B';                // ❌ crash (undefined behavior)
     arr[0] = 'B';               // ✅ works
 
-    printf("%s\n", s);          // may crash or show garbage
+    printf("%s\n", s);          // may crash or show garbage 
+    printf("*s value: %c\n", *s);   // ✅ value stored at that address == "H"
+//❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
     printf("arr: %s\n", arr);   // arr: B
+    printf("s1: %c\n",*s1);     // s1: A
 
     return 0;
 }
