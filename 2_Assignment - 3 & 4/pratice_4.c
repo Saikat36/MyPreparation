@@ -2,20 +2,28 @@
 
 
 
-/*          🧠 Topic 1: Pointer to Array         */
+/*          some question & ans about pointers         */
 
 
 #include <stdio.h>
-
 int main()
 {
-    int arr[3] = {10, 20, 30};     // array of 3 integers
-    int *p = arr;                  // pointer to first element
-    int (*ptr)[3] = &arr;          // pointer to entire array
+    char *p = "ABC";
 
-    printf("p: %p, *p: %d\n", p, *p);          // prints address of arr[0] and its value
-    printf("ptr: %p, *ptr: %p\n", ptr, *ptr);  // prints address of arr and arr itself
-    printf("(*ptr)[1] = %d\n", (*ptr)[1]);     // access 2nd element through pointer to array
+    printf("%%c of *p : %c\n", *p);         // A
+    printf("%%c of *(p+1): %c\n", *(p+1));  // B
+    printf("%%s of p+1 : %s\n", p+1);       // BC
 
     return 0;
 }
+
+/* 
+
+| Expression | Meaning                                               | Output |
+| ---------- | ----------------------------------------------------- | ------ |
+| `*p`       | value at address of `"A"` → `'A'`                     | `A`    |
+| `*(p+1)`   | next character → `'B'`                                | `B`    |
+| `p+1`      | address of `'B'` → `%s` prints from `'B'` till `'\0'` | `BC`   |
+
+
+*/

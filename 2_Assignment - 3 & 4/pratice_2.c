@@ -7,7 +7,7 @@ int main()
     const char *s = "AB";
 
     printf("%p\n", arr);     // address of first element
-    printf("%p\n", &arr[0]); // arr[0] is NOT a pointer,to get same location = &arr[0]
+    printf("%p\n", &arr[0]); // arr[0] is NOT a pointer, so to get same location = &arr[0]
     printf("%c\n", arr[0]);  // 'A'
     printf("%c\n", arr[1]);  // 'B'
 
