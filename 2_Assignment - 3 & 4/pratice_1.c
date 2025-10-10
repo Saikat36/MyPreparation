@@ -4,28 +4,27 @@
 
 int main()
 {
-    int x = 10;                 // 10 is an integer literal
-    char *s  = "Hello";         // pointer to literal (read-only)
-    const char *s1 = "A";       // 'A' is a character literal (read-only)
-    char *s2 = "Hello";         // "Hello" is a string literal (same literal as s)
-    char arr[] = "Hello";       // array with writable copy
+  int x = 10;           // 10 is an integer literal
+  char *s = "Hello";    // pointer to literal (read-only)
+  const char *s1 = "A"; // 'A' is a character literal (read-only)
+  char *s2 = "Hello";   // "Hello" is a string literal (same literal as s)
+  char arr[] = "Hello"; // array with writable copy
 
-    // s[0] = 'M';                 // ❌ undefined behavior
-    // s1[0] = 'B';                // ❌ crash (undefined behavior)
-    arr[0] = 'B';               // ✅ works
+  // s[0] = 'M';                 // ❌ undefined behavior
+  // s1[0] = 'B';                // ❌ crash (undefined behavior)
+  arr[0] = 'B'; // ✅ works
 
-    printf("%s\n", s); // s → is a address of the first character 'H'. %s expects an pointer address 
-    printf("*s value: %c\n", *s);   // ✅ value stored at that address == "H" → ASCII 72
-    printf("*s int value: %d\n", *s);   // ✅ "H" ASCII value == 72
-//❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
-    printf("arr: %s\n", arr);   // arr: B
-    printf("s1: %c\n",*s1);     // s1: A
+  printf("%s\n", s);                // s → is a address of the first character 'H'. %s expects an pointer address
+  printf("*s value: %c\n", *s);     // ✅ value stored at that address == "H" → ASCII 72
+  printf("*s int value: %d\n", *s); // ✅ "H" ASCII value == 72
+                                    // ❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
+  printf("arr: %s\n", arr);         // arr: B
+  printf("s1: %c\n", *s1);          // s1: A
 
-    return 0;
+  return 0;
 }
 
-
-/* 
+/*
 
     Literal = a fixed constant directly written in code (like "Hello", 10, 'A').
 
@@ -68,7 +67,7 @@ Address  | Content     | Meaning
    │ 5004: s1 → 8010 ───────┐ │   │
    │ 5008: s2 → 8000 ─────┐ │ │   │
    │ 5012: arr[] = "Hello"│ │ │   │ (writable copy)
-   └──────────────────────────────┘ 
+   └──────────────────────────────┘
                │  │  │  │
                ▼  ▼  ▼  ▼
    ┌──────────────────────────────┐
@@ -83,20 +82,20 @@ Address  | Content     | Meaning
 📍 BEHAVIOR NOTES
 ───────────────────────────────────────────────────────────────────────
 
-✅ `arr`  
-- Stored in stack  
-- Own copy of `"Hello"`  
-- Writable — modifying `arr[0] = 'B' ` is valid.
+✅ arr
+- Stored in stack
+- Own copy of "Hello"
+- Writable — modifying arr[0] = 'B'  is valid.
 
-⚠️ `s`, `s1`, `s2`  
-- Stored in stack, but **they only hold addresses** of literals.  
-- The literals `"Hello"` and `"A"` live in **read-only memory**.  
-- Attempting to modify `s[0] = 'M'` causes **undefined behavior**  
+⚠️ s, s1, s2
+- Stored in stack, but **they only hold addresses** of literals.
+- The literals "Hello" and "A" live in **read-only memory**.
+- Attempting to modify s[0] = 'M' causes **undefined behavior**
   (can crash, do nothing, or corrupt memory).
 
 ---
 
-🔍 WHY `s` and `s2` both point to 8000
+🔍 WHY s and s2 both point to 8000
 
 it looks like "Hello" appears twice,
 so you might expect two separate copies of "Hello" in memory.
@@ -116,8 +115,8 @@ and all pointers to that literal refer to the same memory location.
 
 | Variable | Initialization | Points to Address | Literal content          |
 | -------- | -------------- | ----------------- | ------------------------ |
-| `s`      | `"Hello"`      | 8000              | 'H','e','l','l','o','\0' |
-| `s2`     | `"Hello"`      | 8000              | 'H','e','l','l','o','\0' |
+| s      | "Hello"      | 8000              | 'H','e','l','l','o','\0' |
+| s2     | "Hello"      | 8000              | 'H','e','l','l','o','\0' |
 
 So both s and s2 point to the same memory block at address 8000.
 
@@ -125,17 +124,17 @@ So both s and s2 point to the same memory block at address 8000.
 
 ### ⚙️ POINTER SIZE (why the 4-byte gap)
 Assuming a **32-bit system**:
-- Each pointer (`s`, `s1`, `s2`) = 4 bytes.
-- Hence:  
-  - `s` → at 5000  
-  - `s1` → at 5004  
-  - `s2` → at 5008  
+- Each pointer (s, s1, s2) = 4 bytes.
+- Hence:
+  - s → at 5000
+  - s1 → at 5004
+  - s2 → at 5008
 
-If it were a **64-bit system**, each pointer would take **8 bytes**, and  
+If it were a **64-bit system**, each pointer would take **8 bytes**, and
 addresses would go 5000, 5008, 5016, etc.
 
 ---
-  
+
 ═══════════════════════════════════════════════════════════════════════
 ✅ MEMORY SUMMARY TABLE
 ═══════════════════════════════════════════════════════════════════════
