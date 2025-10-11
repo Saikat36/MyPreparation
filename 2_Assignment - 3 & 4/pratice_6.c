@@ -22,6 +22,25 @@ C) *ptr prints 65, but *cptr prints 'A' (if ASCII)
 D) Both point to different addresses 
 
 
+ans : 
+
+char *cptr = (char*)&x;
+
+This is a typecast pointer → we take the address of x,
+but tell the compiler to treat it as a char*, not int*.
+
+So now:
+
+1. cptr still points to same address (1000).
+
+2. But dereferencing *cptr means:
+   → read only 1 byte (since char = 1 byte).
+
+At address 1000, first byte = 01000001 = decimal 65 = 'A'.
+
+
+✅ Correct answers: A and C are both technically correct depending on format specifier.
+
 */
 
 

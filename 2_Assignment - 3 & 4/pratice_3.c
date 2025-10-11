@@ -38,7 +38,7 @@ Each format specifier is a different way to open and interpret the box:
 
     %c → open it expecting one letter
 
-    %s → open it expecting a whole word
+    %s → expecting an address tag and it's print a whole word untill '\0'
 
     %p → open it expecting an address tag
 
@@ -59,9 +59,9 @@ Each format specifier is a different way to open and interpret the box:
 
 | Type       | What it points to  | Size of the pointer itself
 | ---------- | ------------------ | --------------------------
-| char *   | 1 byte (char)    | 8 bytes (on 64-bit)
-| int *    | 4 bytes (int)    | 8 bytes (on 64-bit)
-| float *  | 4 bytes (float)  | 8 bytes (on 64-bit)
-| double * | 8 bytes (double) | 8 bytes (on 64-bit)
+| char *     | 1 byte (char)      | 8 bytes (on 64-bit)
+| int *      | 4 bytes (int)      | 8 bytes (on 64-bit)
+| float *    | 4 bytes (float)    | 8 bytes (on 64-bit)
+| double *   | 8 bytes (double)   | 8 bytes (on 64-bit)
 
 */

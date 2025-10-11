@@ -14,11 +14,11 @@ int main()
   // s1[0] = 'B';                // ❌ crash (undefined behavior)
   arr[0] = 'B'; // ✅ works
 
-  printf("%s\n", s);                // s → is a address of the first character 'H'. %s expects an pointer address
-  printf("*s value: %c\n", *s);     // ✅ value stored at that address == "H" → ASCII 72
+  printf("%s\n", s); // s → addressing 1st character 'H'. %s expects an pointer address
+  printf("*s value: %c\n", *s);     // ✅ value stored at that address == "H"
   printf("*s int value: %d\n", *s); // ✅ "H" ASCII value == 72
-                                    // ❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
-  printf("arr: %s\n", arr);         // arr: B
+//❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
+  printf("arr: %s\n", arr);         // arr: Bello
   printf("s1: %c\n", *s1);          // s1: A
 
   return 0;
@@ -113,10 +113,10 @@ That means:  All identical string literals are stored only once in read-only mem
 and all pointers to that literal refer to the same memory location.
 
 
-| Variable | Initialization | Points to Address | Literal content          |
-| -------- | -------------- | ----------------- | ------------------------ |
-| s      | "Hello"      | 8000              | 'H','e','l','l','o','\0' |
-| s2     | "Hello"      | 8000              | 'H','e','l','l','o','\0' |
+| Variable| Initialization | Points to Address | Literal content          |
+| --------| -------------- | ----------------- | ------------------------ |
+|  s      | "Hello"        | 8000              | 'H','e','l','l','o','\0' |
+|  s2     | "Hello"        | 8000              | 'H','e','l','l','o','\0' |
 
 So both s and s2 point to the same memory block at address 8000.
 
