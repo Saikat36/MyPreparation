@@ -8,8 +8,14 @@ int main()
 {
     int x = 65;
     char ch = 'A';
-    char *str = "Hello";
-    int *ptr = &x;
+    int *ptr = &x;    
+    char *str = "Hello"; // str is a pointer that holds the address of the string literal "Hello".
+
+    /*   "Hello"               | ✅ **String literal**
+         ↓
+       Fixed word stored in **read-only memory** (cannot be changed). */
+
+
 
     printf("x = %d\n", x);       // prints number 65
     printf("ch = %c\n", ch);     // prints character A
@@ -22,8 +28,31 @@ int main()
 
 /*
 
-| Type                          | Print with | Example               |
-| ----------------------------- | ---------- | --------------------- |
+----------------------------------------------------------------------------------
+| Part                   | What it really is
+| ---------------------- | -----------------------------------------------------
+|  "Hello"               | ✅ **String literal**
+     ↓
+   Fixed word stored in **read-only memory** (cannot be changed).
+---------------------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------------------
+| Part                   | What it really is
+| ---------------------- | -----------------------------------------------------
+|  char *str = "Hello";  | 🚫 Not a string literal — it’s a **pointer variable**
+|     ↓
+|str  is a **pointer** that holds the **address** of the string literal  "Hello" .
+----------------------------------------------------------------------------------
+
+
+
+
+
+
+| Type                          |Print with| Example             |
+| ----------------------------- |----------| --------------------|
 | int                           | %d       | printf("%d", x);    |
 | char                          | %c       | printf("%c", ch);   |
 | char[] / char *               | %s       | printf("%s", str);  |
@@ -43,14 +72,17 @@ Each format specifier is a different way to open and interpret the box:
     %p → open it expecting an address tag
 
 
+-----
 
-| Type / Example     | Spec | Works With              | Prints (Expected)
-| ------------------ | ---- | ----------------------- | ----------------------
-| int x = 65;        | %d   | int, short, long        | 65
-| char ch = 'A';     | %c   | char                    | A
-| char *str = "Hello"| %s   | char *, char[]          | Hello
-| int *ptr = &x;     | %p   | any pointer             | address (e.g. 0x5000)
-| *ptr (value at ptr)| %d   | dereferenced int ptr    | 65
+| Example / Type        | Spec | Works With        | Meaning / Holds      | Prints |
+|-----------------------|------|-------------------|----------------------|--------|
+| int x = 65;           | %d   | int, short, long  | number               | 65     |
+| char ch = 'A';        | %c   | char              | single character     | A      |
+| "Hello" (literal)     | %s   | char *, char[]    | read-only string     | Hello  |
+| char *str = "Hello";  | %s   | char *, char[]    | address of "Hello"   | Hello  |
+| char arr[] = "Hello"; | %s   | char[]            | string copy in stack | Hello  |
+| int *ptr = &x;        | %p   | any pointer       | address of x         | 0x5000 |
+| *ptr (value at ptr)   | %d   | int pointer value | value from pointer   | 65     |
 
 
 -----
@@ -63,5 +95,6 @@ Each format specifier is a different way to open and interpret the box:
 | int *      | 4 bytes (int)      | 8 bytes (on 64-bit)
 | float *    | 4 bytes (float)    | 8 bytes (on 64-bit)
 | double *   | 8 bytes (double)   | 8 bytes (on 64-bit)
+
 
 */
