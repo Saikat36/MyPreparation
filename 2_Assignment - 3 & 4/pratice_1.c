@@ -16,8 +16,8 @@ int main()
 
   printf("%s\n", s); // s → addressing 1st character 'H'. %s expects an pointer address
   printf("*s value: %c\n", *s);     // ✅ value stored at that address == "H"
+//❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌  
   printf("*s int value: %d\n", *s); // ✅ "H" ASCII value == 72
-//❌printf("%s\n", *s);  // *s = “value at address s” = 'H(72)' == printf("%s\n", 72)❌
   printf("arr: %s\n", arr);         // arr: Bello
   printf("s1: %c\n", *s1);          // s1: A
 

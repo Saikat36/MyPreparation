@@ -11,8 +11,8 @@ int main()
     int *ptr = &x;    
     char *str = "Hello"; // str is a pointer that holds the address of the string literal "Hello".
 
-    /*   "Hello"               | ✅ **String literal**
-         ↓
+    /*  "Hello"               | ✅ **String literal**
+          ↓
        Fixed word stored in **read-only memory** (cannot be changed). */
 
 
@@ -20,6 +20,7 @@ int main()
     printf("x = %d\n", x);       // prints number 65
     printf("ch = %c\n", ch);     // prints character A
     printf("str = %s\n", str);   // prints Hello
+//❌printf("%s\n", *str);  // “1st value at address str” = 'H(72) = printf("%s\n", 72)❌
     printf("ptr = %p\n", ptr);   // prints address of x (like 0x7ffee8f3a9bc)
     printf("*ptr = %d\n", *ptr); // prints 65 (value pointed to)
 
@@ -32,8 +33,8 @@ int main()
 | Part                   | What it really is
 | ---------------------- | -----------------------------------------------------
 |  "Hello"               | ✅ **String literal**
-     ↓
-   Fixed word stored in **read-only memory** (cannot be changed).
+|    ↓
+|  Fixed word stored in **read-only memory** (cannot be changed).
 ---------------------------------------------------------------------------------
 
 
