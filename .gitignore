@@ -45,3 +45,6 @@ Release/
 # System-specific files
 .DS_Store
 Thumbs.db
+
+# Notepad Notes
+.txt

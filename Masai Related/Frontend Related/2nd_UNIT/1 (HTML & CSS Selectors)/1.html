@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nura Health</title>
+    <script>
+      window.tailwind = {
+        config: {
+          theme: {
+            extend: {
+              colors: {
+                moss: "#2E4036",
+                clay: "#CC5833",
+                cream: "#F2F0E9",
+                charcoal: "#1A1A1A",
+              },
+              borderRadius: {
+                shell: "2rem",
+                capsule: "999px",
+                frame: "3rem",
+              },
+              boxShadow: {
+                halo: "0 30px 90px rgba(26, 26, 26, 0.18)",
+                soft: "0 18px 45px rgba(46, 64, 54, 0.12)",
+              },
+              letterSpacing: {
+                dense: "-0.05em",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500;1,600;1,700&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --moss: #2e4036;
+        --clay: #cc5833;
+        --cream: #f2f0e9;
+        --charcoal: #1a1a1a;
+        --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--charcoal);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.05;
+        z-index: 60;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23n)'/%3E%3C/svg%3E");
+        mix-blend-mode: multiply;
+      }
+      .font-display { font-family: "Outfit", "Plus Jakarta Sans", sans-serif; }
+      .font-editorial { font-family: "Cormorant Garamond", serif; }
+      .font-mono { font-family: "IBM Plex Mono", monospace; }
+      .glass-nav {
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .hero-overlay {
+        background:
+          linear-gradient(180deg, rgba(46, 64, 54, 0.12) 0%, rgba(26, 26, 26, 0.28) 35%, rgba(26, 26, 26, 0.9) 100%),
+          linear-gradient(120deg, rgba(46, 64, 54, 0.8) 0%, rgba(26, 26, 26, 0.1) 50%, rgba(26, 26, 26, 0.8) 100%);
+      }
+      .magnetic {
+        position: relative;
+        overflow: hidden;
+        transform-origin: center;
+        transition: transform 220ms ease, box-shadow 220ms ease;
+      }
+      .magnetic::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+        transform: translateX(-100%);
+        transition: transform 320ms ease;
+      }
+      .magnetic:hover { transform: scale(1.03); }
+      .magnetic:hover::before { transform: translateX(0); }
+      .diagnostic-stack { perspective: 1200px; }
+      .diagnostic-card {
+        transition: transform 700ms var(--ease-bounce), opacity 500ms ease, box-shadow 500ms ease;
+      }
+      .live-dot { animation: pulse 1.8s ease-in-out infinite; }
+      .cursor-blink { animation: blink 1s step-end infinite; }
+      .scheduler-cursor {
+        transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 350ms ease;
+      }
+      .day-cell {
+        transition: background-color 280ms ease, color 280ms ease, transform 280ms ease, box-shadow 280ms ease;
+      }
+      .day-cell.active {
+        background: var(--moss);
+        color: var(--cream);
+        transform: scale(0.96);
+        box-shadow: inset 0 0 0 1px rgba(242, 240, 233, 0.15);
+      }
+      .parallax-texture {
+        background:
+          linear-gradient(180deg, rgba(26, 26, 26, 0.82), rgba(26, 26, 26, 0.96)),
+          url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1400&q=80");
+        background-size: cover;
+        background-position: center;
+      }
+      .manifest-line span {
+        display: inline-block;
+        will-change: transform, opacity;
+      }
+      .protocol-card { will-change: transform, filter, opacity; }
+      .grid-scan::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent, rgba(204, 88, 51, 0.45), transparent);
+        animation: scan 3s linear infinite;
+      }
+      .ekg-path {
+        stroke-dasharray: 420;
+        stroke-dashoffset: 420;
+        animation: ekg 2.4s linear infinite;
+      }
+      .helix-rotor {
+        animation: spin 18s linear infinite;
+        transform-origin: center;
+      }
+      @keyframes pulse {
+        0%,100% { transform: scale(1); opacity: 0.55; }
+        50% { transform: scale(1.35); opacity: 1; }
+      }
+      @keyframes blink {
+        0%,49% { opacity: 1; }
+        50%,100% { opacity: 0; }
+      }
+      @keyframes scan {
+        0% { transform: translateY(-100%); }
+        100% { transform: translateY(100%); }
+      }
+      @keyframes ekg {
+        0% { stroke-dashoffset: 420; opacity: 0.25; }
+        35% { opacity: 1; }
+        100% { stroke-dashoffset: 0; opacity: 0.25; }
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import React, { useEffect, useRef, useState } from "https://esm.sh/react@19.1.0";
+      import { createRoot } from "https://esm.sh/react-dom@19.1.0/client";
+      import htm from "https://esm.sh/htm@3.1.1";
+      import { ArrowUpRight, Check, Cpu, Leaf, ShieldCheck, Sparkles } from "https://esm.sh/lucide-react@0.511.0";
+      import { gsap } from "https://esm.sh/gsap@3.13.0";
+      import { ScrollTrigger } from "https://esm.sh/gsap@3.13.0/ScrollTrigger";
+
+      gsap.registerPlugin(ScrollTrigger);
+      const html = htm.bind(React.createElement);
+      const navLinks = [
+        { label: "Approach", href: "#features" },
+        { label: "Manifesto", href: "#philosophy" },
+        { label: "Protocol", href: "#protocol" },
+        { label: "Membership", href: "#membership" },
+      ];
+      const diagnosticLabels = ["Epigenetic Age", "Microbiome Score", "Cortisol Optimization"];
+      const telemetryMessages = [
+        "Optimizing Circadian Rhythm...",
+        "Mapping inflammatory markers...",
+        "Recalibrating recovery windows...",
+        "Sequencing nutrient timing...",
+      ];
+      const protocolCards = [
+        {
+          title: "Genome Motion",
+          eyebrow: "Layer 01",
+          description: "A rotating double-helix engine translating genomic variance into applied performance strategy.",
+          type: "helix",
+        },
+        {
+          title: "Cellular Scan",
+          eyebrow: "Layer 02",
+          description: "Laser-guided cell mapping surfaces anomalies before they become narratives.",
+          type: "grid",
+        },
+        {
+          title: "Signal Rhythm",
+          eyebrow: "Layer 03",
+          description: "Continuous waveform telemetry turns stress, sleep, and repair into a live operational loop.",
+          type: "ekg",
+        },
+      ];
+
+      function useMagneticButtons() {
+        useEffect(() => {
+          const buttons = Array.from(document.querySelectorAll("[data-magnetic='true']"));
+          const cleanups = buttons.map((button) => {
+            const move = (event) => {
+              const rect = button.getBoundingClientRect();
+              const x = (event.clientX - rect.left - rect.width / 2) / rect.width;
+              const y = (event.clientY - rect.top - rect.height / 2) / rect.height;
+              button.style.transform = `translate(${x * 10}px, ${y * 10}px) scale(1.03)`;
+            };
+            const leave = () => {
+              button.style.transform = "";
+            };
+            button.addEventListener("mousemove", move);
+            button.addEventListener("mouseleave", leave);
+            return () => {
+              button.removeEventListener("mousemove", move);
+              button.removeEventListener("mouseleave", leave);
+            };
+          });
+          return () => cleanups.forEach((cleanup) => cleanup());
+        }, []);
+      }
+
+      function Navbar() {
+        const [scrolled, setScrolled] = useState(false);
+        useEffect(() => {
+          const onScroll = () => setScrolled(window.scrollY > 40);
+          onScroll();
+          window.addEventListener("scroll", onScroll);
+          return () => window.removeEventListener("scroll", onScroll);
+        }, []);
+        return html`
+          <header className="fixed inset-x-0 top-5 z-50 px-4 md:px-8">
+            <nav className=${[
+              "mx-auto flex max-w-7xl items-center justify-between rounded-capsule border px-4 py-3 transition-all duration-500 md:px-6",
+              scrolled ? "glass-nav border-moss/10 bg-white/60 text-moss shadow-soft" : "border-white/15 bg-white/0 text-white",
+            ].join(" ")}>
+              <a href="#top" className="font-display text-lg font-semibold tracking-dense">Nura Health</a>
+              <div className="hidden items-center gap-6 text-sm md:flex">
+                ${navLinks.map((link) => html`<a className="transition-opacity hover:opacity-70" href=${link.href}>${link.label}</a>`)}
+              </div>
+              <a href="#membership" data-magnetic="true" className=${[
+                "magnetic rounded-capsule border px-4 py-2 text-sm font-medium transition-colors",
+                scrolled ? "border-moss/15 bg-moss text-cream" : "border-white/20 bg-white/10 text-white",
+              ].join(" ")}>
+                Begin Protocol
+              </a>
+            </nav>
+          </header>
+        `;
+      }
+
+      function Hero() {
+        const heroRef = useRef(null);
+        useEffect(() => {
+          const ctx = gsap.context(() => {
+            gsap.from(".hero-reveal", {
+              y: 48,
+              opacity: 0,
+              duration: 1.1,
+              stagger: 0.16,
+              ease: "power3.out",
+              delay: 0.25,
+            });
+          }, heroRef);
+          return () => ctx.revert();
+        }, []);
+        return html`
+          <section id="top" ref=${heroRef} className="relative min-h-[100dvh] overflow-hidden">
+            <img className="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?auto=format&fit=crop&w=1600&q=80" alt="Forest canopy" />
+            <div className="hero-overlay absolute inset-0"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(204,88,51,0.18),transparent_28%)]"></div>
+            <div className="relative mx-auto flex min-h-[100dvh] max-w-7xl items-end px-4 pb-14 pt-32 md:px-8 md:pb-20">
+              <div className="max-w-4xl">
+                <p className="hero-reveal font-mono text-[11px] uppercase tracking-[0.4em] text-cream/72">Biometric architecture for human performance</p>
+                <h1 className="mt-4 text-5xl font-semibold leading-[0.9] tracking-dense text-cream sm:text-7xl md:text-[8.5rem]">
+                  <span className="hero-reveal block">Nature is the</span>
+                  <span className="hero-reveal font-editorial text-[1.22em] font-semibold italic text-[#f6f1ea]">Algorithm.</span>
+                </h1>
+                <p className="hero-reveal mt-6 max-w-xl text-base leading-7 text-cream/75 md:text-lg">
+                  Nura Health fuses clinical telemetry, botanical intelligence, and protocol design into one continuous instrument for longevity.
+                </p>
+                <div className="hero-reveal mt-8 flex flex-wrap gap-4">
+                  <a href="#features" data-magnetic="true" className="magnetic rounded-capsule bg-clay px-6 py-3 text-sm font-semibold text-cream shadow-halo">Explore the System</a>
+                  <a href="#protocol" data-magnetic="true" className="magnetic rounded-capsule border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white">View Protocol Layers</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function DiagnosticShuffler() {
+        const [cards, setCards] = useState(diagnosticLabels);
+        useEffect(() => {
+          const interval = setInterval(() => {
+            setCards((current) => {
+              const next = [...current];
+              next.unshift(next.pop());
+              return next;
+            });
+          }, 3000);
+          return () => clearInterval(interval);
+        }, []);
+        return html`
+          <div className="diagnostic-stack relative h-[19rem]">
+            ${cards.map((label, index) => {
+              const styles = [
+                "translate-y-0 rotate-[-2deg] z-30 opacity-100",
+                "translate-y-8 rotate-[2deg] z-20 opacity-85",
+                "translate-y-16 rotate-[-1deg] z-10 opacity-65",
+              ][index];
+              return html`
+                <div key=${label} className=${`diagnostic-card absolute inset-x-0 mx-auto flex h-48 w-full max-w-sm rounded-frame border border-black/5 bg-white p-6 shadow-soft ${styles}`}>
+                  <div className="flex h-full w-full flex-col justify-between">
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.3em] text-moss/45">
+                      <span>Audit Intelligence</span>
+                      <span className="font-mono">0${index + 1}</span>
+                    </div>
+                    <div>
+                      <p className="font-display text-2xl font-semibold tracking-dense text-charcoal">${label}</p>
+                      <p className="mt-3 max-w-xs text-sm leading-6 text-charcoal/58">Clinical modeling condenses longitudinal signals into one decisive insight.</p>
+                    </div>
+                    <div className="font-mono text-xs uppercase tracking-[0.2em] text-clay">Rotating priority artifact</div>
+                  </div>
+                </div>
+              `;
+            })}
+          </div>
+        `;
+      }
+
+      function TelemetryTypewriter() {
+        const [messageIndex, setMessageIndex] = useState(0);
+        const [typed, setTyped] = useState("");
+        useEffect(() => {
+          const message = telemetryMessages[messageIndex];
+          const timers = [];
+          let charIndex = 0;
+          const writer = setInterval(() => {
+            charIndex += 1;
+            setTyped(message.slice(0, charIndex));
+            if (charIndex >= message.length) {
+              clearInterval(writer);
+              timers.push(setTimeout(() => {
+                setTyped("");
+                setMessageIndex((current) => (current + 1) % telemetryMessages.length);
+              }, 1100));
+            }
+          }, 60);
+          return () => {
+            clearInterval(writer);
+            timers.forEach((timer) => clearTimeout(timer));
+          };
+        }, [messageIndex]);
+        return html`
+          <div className="flex h-full min-h-[19rem] flex-col rounded-frame border border-white/70 bg-white p-6 shadow-soft">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="live-dot h-2.5 w-2.5 rounded-full bg-clay"></span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-moss/55">Live Feed</span>
+              </div>
+              <span className="font-mono text-xs text-moss/40">Neural Stream</span>
+            </div>
+            <div className="mt-8 rounded-[1.5rem] bg-charcoal px-5 py-6 text-cream shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
+              <p className="font-mono text-xs uppercase tracking-[0.25em] text-cream/45">Telemetry</p>
+              <div className="mt-4 min-h-[3.5rem] text-xl leading-8 text-cream">${typed}<span className="cursor-blink text-clay">|</span></div>
+            </div>
+            <div className="mt-auto grid grid-cols-2 gap-3 pt-5 font-mono text-xs text-moss/60">
+              <div className="rounded-[1.4rem] bg-[#eff1eb] px-4 py-3">REM Stability 92%</div>
+              <div className="rounded-[1.4rem] bg-[#eff1eb] px-4 py-3">Vagal Tone +18%</div>
+            </div>
+          </div>
+        `;
+      }
+
+      function ProtocolScheduler() {
+        const days = ["S", "M", "T", "W", "T", "F", "S"];
+        const positions = [
+          { x: 12, y: 84, day: 1 },
+          { x: 112, y: 84, day: 3 },
+          { x: 212, y: 84, day: 5 },
+          { x: 246, y: 206, save: true },
+        ];
+        const [cursor, setCursor] = useState({ x: 12, y: 84, visible: true });
+        const [activeDay, setActiveDay] = useState(null);
+        const [saving, setSaving] = useState(false);
+        useEffect(() => {
+          const timers = [];
+          let step = 0;
+          const run = () => {
+            const target = positions[step];
+            setCursor({ x: target.x, y: target.y, visible: true });
+            if (target.day !== undefined) timers.push(setTimeout(() => setActiveDay(target.day), 360));
+            if (target.save) {
+              timers.push(setTimeout(() => setSaving(true), 360));
+              timers.push(setTimeout(() => setCursor((current) => ({ ...current, visible: false })), 1000));
+              timers.push(setTimeout(() => {
+                setActiveDay(null);
+                setSaving(false);
+                step = -1;
+              }, 2000));
+            }
+            step += 1;
+            timers.push(setTimeout(run, step < positions.length ? 1200 : 2600));
+          };
+          timers.push(setTimeout(run, 500));
+          return () => timers.forEach((timer) => clearTimeout(timer));
+        }, []);
+        return html`
+          <div className="relative min-h-[19rem] rounded-frame border border-white/70 bg-white p-6 shadow-soft">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-moss/55">Adaptive Regimen</span>
+              <span className="font-mono text-xs text-moss/40">Protocol Scheduler</span>
+            </div>
+            <div className="mt-6 rounded-[1.8rem] bg-[#eef0e8] p-4">
+              <div className="grid grid-cols-7 gap-2 font-mono text-xs text-moss/45">
+                ${days.map((day, index) => html`<div key=${`${day}-${index}`} className="pb-2 text-center">${day}</div>`)}
+              </div>
+              <div className="relative mt-1 grid grid-cols-7 gap-2">
+                ${days.map((day, index) => html`<button key=${`${day}-cell-${index}`} className=${`day-cell h-12 rounded-[1rem] border border-moss/8 bg-white text-sm font-medium text-moss/70 ${activeDay === index ? "active" : ""}`}>${index + 1}</button>`)}
+                <div className="scheduler-cursor absolute left-0 top-0 ${cursor.visible ? "opacity-100" : "opacity-0"}" style=${{ transform: `translate(${cursor.x}px, ${cursor.y}px)` }}>
+                  <svg width="26" height="30" viewBox="0 0 26 30" fill="none">
+                    <path d="M4 2L21 15L14.2 16.6L17.8 25.5L13.4 27.2L9.7 18.4L4 23V2Z" fill="#CC5833" stroke="#1A1A1A" strokeWidth="1.2" />
+                  </svg>
+                </div>
+              </div>
+              <button className=${`mt-5 w-full rounded-[1.2rem] px-4 py-3 text-sm font-semibold transition-colors ${saving ? "bg-moss text-cream" : "bg-charcoal text-cream"}`}>${saving ? "Protocol Saved" : "Save"}</button>
+            </div>
+          </div>
+        `;
+      }
+
+      function Features() {
+        return html`
+          <section id="features" className="relative mx-auto max-w-7xl px-4 py-24 md:px-8 md:py-32">
+            <div className="mb-12 max-w-3xl">
+              <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-moss/55">Precision Micro-UI Dashboard</p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-dense text-charcoal md:text-6xl">
+                Functional artifacts for <span className="font-editorial italic text-moss">living data.</span>
+              </h2>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-3">
+              <${DiagnosticShuffler} />
+              <${TelemetryTypewriter} />
+              <${ProtocolScheduler} />
+            </div>
+          </section>
+        `;
+      }
+
+      function Philosophy() {
+        const sectionRef = useRef(null);
+        useEffect(() => {
+          const ctx = gsap.context(() => {
+            gsap.to(".philosophy-bg", {
+              yPercent: 12,
+              ease: "none",
+              scrollTrigger: { trigger: sectionRef.current, scrub: true },
+            });
+            gsap.from(".manifest-line span", {
+              yPercent: 120,
+              opacity: 0,
+              stagger: 0.03,
+              duration: 1,
+              ease: "power3.out",
+              scrollTrigger: { trigger: ".manifest-copy", start: "top 75%" },
+            });
+          }, sectionRef);
+          return () => ctx.revert();
+        }, []);
+        const splitLine = (line) => line.split(" ").map((word, index) => html`<span key=${`${word}-${index}`} className="mr-[0.24em]">${word}</span>`);
+        return html`
+          <section id="philosophy" ref=${sectionRef} className="relative overflow-hidden rounded-t-[4rem] bg-charcoal">
+            <div className="philosophy-bg parallax-texture absolute inset-0 opacity-90"></div>
+            <div className="relative mx-auto max-w-7xl px-4 py-24 md:px-8 md:py-36">
+              <div className="manifest-copy max-w-5xl text-cream">
+                <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-cream/45">The Manifesto</p>
+                <div className="mt-8 space-y-8 md:space-y-10">
+                  <p className="manifest-line text-4xl font-semibold leading-[0.95] tracking-dense md:text-7xl">${splitLine("Modern medicine asks: What is wrong?")}</p>
+                  <p className="manifest-line text-4xl font-semibold leading-[0.95] tracking-dense md:text-7xl">
+                    <span className="mr-[0.18em] text-cream/55">We ask:</span>
+                    ${splitLine("What is")}
+                    <span className="font-editorial italic text-[#d4b8a4]">optimal?</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function ProtocolVisual({ type }) {
+        if (type === "helix") {
+          return html`
+            <div className="flex h-full items-center justify-center rounded-[2.5rem] border border-cream/10 bg-black/20 p-6">
+              <svg className="helix-rotor h-56 w-56 md:h-72 md:w-72" viewBox="0 0 240 240" fill="none">
+                <circle cx="120" cy="120" r="92" stroke="rgba(242,240,233,0.14)" strokeWidth="1" />
+                <path d="M80 40C150 70 150 170 80 200" stroke="#F2F0E9" strokeWidth="7" strokeLinecap="round" />
+                <path d="M160 40C90 70 90 170 160 200" stroke="#CC5833" strokeWidth="7" strokeLinecap="round" />
+                ${Array.from({ length: 9 }).map((_, index) => {
+                  const y = 50 + index * 18;
+                  return html`<path key=${index} d=${`M89 ${y}H151`} stroke=${index % 2 ? "#CC5833" : "#F2F0E9"} strokeWidth="3" strokeLinecap="round" opacity="0.7" />`;
+                })}
+              </svg>
+            </div>
+          `;
+        }
+        if (type === "grid") {
+          return html`
+            <div className="grid-scan relative overflow-hidden rounded-[2.5rem] border border-cream/10 bg-black/20 p-5">
+              <div className="grid h-full min-h-[18rem] grid-cols-6 gap-2">
+                ${Array.from({ length: 36 }).map((_, index) => html`<div key=${index} className="rounded-[1rem] border border-cream/10 bg-cream/[0.04]"></div>`)}
+              </div>
+            </div>
+          `;
+        }
+        return html`
+          <div className="flex h-full items-center justify-center rounded-[2.5rem] border border-cream/10 bg-black/20 p-6">
+            <svg className="h-48 w-full max-w-xl" viewBox="0 0 420 120" fill="none">
+              <path className="ekg-path" d="M0 74H62L88 74L108 30L132 96L156 52H198L226 74H262L286 18L318 104L350 62H420" stroke="#CC5833" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        `;
+      }
+
+      function Protocol() {
+        const sectionRef = useRef(null);
+        useEffect(() => {
+          const ctx = gsap.context(() => {
+            const cards = gsap.utils.toArray(".protocol-card");
+            cards.forEach((card, index) => {
+              if (index === 0) return;
+              const previous = cards[index - 1];
+              gsap.timeline({
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 65%",
+                  end: "top 20%",
+                  scrub: true,
+                },
+              }).to(previous, {
+                scale: 0.9,
+                filter: "blur(20px)",
+                opacity: 0.5,
+                ease: "none",
+              });
+            });
+          }, sectionRef);
+          return () => ctx.revert();
+        }, []);
+        return html`
+          <section id="protocol" ref=${sectionRef} className="relative bg-charcoal px-4 pb-24 md:px-8 md:pb-32">
+            <div className="mx-auto max-w-7xl">
+              <div className="max-w-3xl pb-12 pt-8 text-cream md:pb-16">
+                <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-cream/45">Sticky Stacking Archive</p>
+                <h2 className="mt-4 font-display text-4xl font-semibold tracking-dense md:text-6xl">Every layer narrows noise into <span className="font-editorial italic text-[#d4b8a4]">signal.</span></h2>
+              </div>
+              <div className="space-y-10">
+                ${protocolCards.map((card, index) => html`
+                  <article key=${card.title} className="protocol-card sticky min-h-[88vh] rounded-[3rem] border border-cream/10 bg-[#202320] p-6 text-cream shadow-halo md:p-10" style=${{ top: `${24 + index * 18}px` }}>
+                    <div className="grid h-full gap-8 md:grid-cols-[1.1fr_0.9fr]">
+                      <div className="flex flex-col justify-between">
+                        <div>
+                          <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-cream/45">${card.eyebrow}</p>
+                          <h3 className="mt-4 font-display text-4xl font-semibold tracking-dense md:text-6xl">${card.title}</h3>
+                          <p className="mt-5 max-w-lg text-base leading-7 text-cream/68 md:text-lg">${card.description}</p>
+                        </div>
+                        <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-cream/42">
+                          <span>Live protocol fragment</span>
+                          <ArrowUpRight size=${16} />
+                        </div>
+                      </div>
+                      <${ProtocolVisual} type=${card.type} />
+                    </div>
+                  </article>
+                `)}
+              </div>
+            </div>
+          </section>
+        `;
+      }
+
+      function Membership() {
+        const tiers = [
+          { name: "Foundation", price: "$480", accent: false, items: ["Quarterly biomarker review", "Baseline metabolic map", "Nutrient and sleep protocol"] },
+          { name: "Performance", price: "$980", accent: true, items: ["Monthly lab and recovery calibration", "Continuous protocol refinement", "Priority clinician channel"] },
+          { name: "Executive", price: "$1,850", accent: false, items: ["White-glove diagnostic planning", "Travel-aware regimen design", "Quarterly strategy intensives"] },
+        ];
+        return html`
+          <section id="membership" className="mx-auto max-w-7xl px-4 py-24 md:px-8 md:py-32">
+            <div className="max-w-3xl">
+              <p className="font-mono text-[11px] uppercase tracking-[0.35em] text-moss/55">Membership</p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-dense text-charcoal md:text-6xl">Choose the protocol cadence that matches your <span className="font-editorial italic text-clay">metabolism.</span></h2>
+            </div>
+            <div className="mt-12 grid gap-6 lg:grid-cols-3">
+              ${tiers.map((tier) => html`
+                <article key=${tier.name} className=${["rounded-[2.5rem] border p-8 shadow-soft", tier.accent ? "border-moss bg-moss text-cream" : "border-black/6 bg-white text-charcoal"].join(" ")}>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-display text-2xl font-semibold tracking-dense">${tier.name}</p>
+                      <p className=${`mt-3 font-mono text-xs uppercase tracking-[0.25em] ${tier.accent ? "text-cream/55" : "text-moss/45"}`}>per month</p>
+                    </div>
+                    ${tier.accent ? html`<Sparkles size=${18} />` : html`<ShieldCheck size=${18} className="text-moss/55" />`}
+                  </div>
+                  <div className="mt-8 text-5xl font-semibold tracking-dense">${tier.price}</div>
+                  <div className="mt-8 space-y-4">
+                    ${tier.items.map((item) => html`
+                      <div key=${item} className="flex items-start gap-3 text-sm leading-6">
+                        <Check size=${16} className="mt-1 shrink-0" />
+                        <span>${item}</span>
+                      </div>
+                    `)}
+                  </div>
+                  <a href="#top" data-magnetic="true" className=${["magnetic mt-10 inline-flex rounded-capsule px-5 py-3 text-sm font-semibold", tier.accent ? "bg-clay text-cream" : "bg-charcoal text-cream"].join(" ")}>Start ${tier.name}</a>
+                </article>
+              `)}
+            </div>
+          </section>
+        `;
+      }
+
+      function Footer() {
+        return html`
+          <footer className="rounded-t-[4rem] bg-charcoal px-4 pb-10 pt-14 text-cream md:px-8">
+            <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_auto]">
+              <div>
+                <p className="font-display text-3xl font-semibold tracking-dense">Nura Health</p>
+                <p className="mt-4 max-w-md text-sm leading-6 text-cream/62">Clinical systems for people who treat health as a creative, measurable discipline.</p>
+              </div>
+              <div className="grid gap-3 text-sm text-cream/65">
+                <a href="#features">Platform</a>
+                <a href="#philosophy">Manifesto</a>
+                <a href="#membership">Membership</a>
+                <a href="#top">Contact</a>
+              </div>
+            </div>
+            <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-6 text-sm text-cream/52 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-3">
+                <span className="live-dot h-2.5 w-2.5 rounded-full bg-[#69c77f]"></span>
+                <span className="font-mono text-xs uppercase tracking-[0.25em]">System Operational</span>
+              </div>
+              <div className="flex flex-wrap gap-5">
+                <span>Privacy</span>
+                <span>Terms</span>
+                <span>Journal</span>
+              </div>
+            </div>
+          </footer>
+        `;
+      }
+
+      function MetricsBar() {
+        const items = [
+          { icon: Leaf, label: "Biological Interface", value: "24/7" },
+          { icon: Cpu, label: "Telemetry Sync", value: "11.8M" },
+          { icon: ShieldCheck, label: "Clinical Accuracy", value: "99.2%" },
+        ];
+        return html`
+          <section className="mx-auto -mt-10 max-w-7xl px-4 md:px-8">
+            <div className="grid gap-4 rounded-[2.5rem] border border-black/5 bg-white/80 p-5 shadow-soft backdrop-blur md:grid-cols-3 md:p-6">
+              ${items.map(({ icon: Icon, label, value }) => html`
+                <div key=${label} className="rounded-[1.8rem] bg-[#eceee7] p-5">
+                  <div className="flex items-center justify-between text-moss">
+                    <Icon size=${18} />
+                    <span className="font-mono text-xs uppercase tracking-[0.25em] text-moss/45">${label}</span>
+                  </div>
+                  <div className="mt-6 font-display text-4xl font-semibold tracking-dense text-charcoal">${value}</div>
+                </div>
+              `)}
+            </div>
+          </section>
+        `;
+      }
+
+      function App() {
+        useMagneticButtons();
+        useEffect(() => {
+          ScrollTrigger.refresh();
+        }, []);
+        return html`
+          <div>
+            <${Navbar} />
+            <main>
+              <${Hero} />
+              <${MetricsBar} />
+              <${Features} />
+              <${Philosophy} />
+              <${Protocol} />
+              <${Membership} />
+            </main>
+            <${Footer} />
+          </div>
+        `;
+      }
+
+      createRoot(document.getElementById("root")).render(html`<${App} />`);
+    </script>
+  </body>
+</html>

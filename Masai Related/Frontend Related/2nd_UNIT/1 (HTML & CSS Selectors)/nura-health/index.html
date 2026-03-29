@@ -1,0 +1,1373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nura Health | Nature is the Algorithm</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              moss: "#2E4036",
+              clay: "#CC5833",
+              cream: "#F2F0E9",
+              charcoal: "#1A1A1A",
+            },
+            fontFamily: {
+              jakarta: ["Plus Jakarta Sans", "sans-serif"],
+              outfit: ["Outfit", "sans-serif"],
+              serif: ["Cormorant Garamond", "serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            borderRadius: {
+              "4xl": "2rem",
+              "5xl": "2.5rem",
+              "6xl": "3rem",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Global Noise Overlay */
+      .noise-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.05;
+      }
+
+      .noise-overlay svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f2f0e9;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #2e4036;
+        border-radius: 4px;
+      }
+
+      /* Magnetic Button Effect */
+      .magnetic-btn {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .magnetic-btn:hover {
+        transform: scale(1.05);
+      }
+
+      /* Sliding Background */
+      .slide-bg {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .slide-bg::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: currentColor;
+        transition: left 0.4s ease;
+        z-index: -1;
+      }
+
+      .slide-bg:hover::before {
+        left: 0;
+      }
+
+      /* Glassmorphism */
+      .glass {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      /* Typewriter Cursor */
+      .cursor-blink {
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Pulse Animation */
+      .pulse-dot {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+      }
+
+      /* Card Shuffle Spring */
+      .spring-bounce {
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* EKG Wave Animation */
+      .ekg-path {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: ekg 2s linear infinite;
+      }
+
+      @keyframes ekg {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      /* Rotating Helix */
+      .rotate-helix {
+        animation: rotateHelix 8s linear infinite;
+      }
+
+      @keyframes rotateHelix {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Laser Scan */
+      .laser-scan {
+        animation: scan 3s ease-in-out infinite;
+      }
+
+      @keyframes scan {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        50% {
+          transform: translateY(100%);
+          opacity: 1;
+        }
+      }
+
+      /* Smooth scroll */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #f2f0e9;
+        color: #1a1a1a;
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Noise Overlay -->
+    <div class="noise-overlay">
+      <svg>
+        <filter id="noise">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.8"
+            numOctaves="4"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" />
+      </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav
+      id="navbar"
+      class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-8 py-4 rounded-full transition-all duration-500"
+    >
+      <div class="flex items-center gap-8">
+        <a
+          href="#"
+          class="font-outfit font-bold text-xl tracking-tight transition-colors duration-500"
+          id="logo"
+          >NURA</a
+        >
+        <div class="hidden md:flex items-center gap-6">
+          <a
+            href="#features"
+            class="text-sm font-medium hover:opacity-70 transition-opacity nav-link"
+            >Features</a
+          >
+          <a
+            href="#philosophy"
+            class="text-sm font-medium hover:opacity-70 transition-opacity nav-link"
+            >Philosophy</a
+          >
+          <a
+            href="#protocol"
+            class="text-sm font-medium hover:opacity-70 transition-opacity nav-link"
+            >Protocol</a
+          >
+          <a
+            href="#membership"
+            class="text-sm font-medium hover:opacity-70 transition-opacity nav-link"
+            >Membership</a
+          >
+        </div>
+        <button
+          class="magnetic-btn bg-clay text-white px-6 py-2 rounded-full text-sm font-semibold"
+        >
+          Begin Assessment
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      id="hero"
+      class="relative h-screen flex items-end justify-start overflow-hidden"
+    >
+      <!-- Background Image -->
+      <div class="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?w=1920&q=80"
+          alt="Dark Forest"
+          class="w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-moss via-moss/70 to-transparent"
+        ></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-charcoal/50 to-transparent"
+        ></div>
+      </div>
+
+      <!-- Hero Content -->
+      <div class="relative z-10 px-8 md:px-16 pb-20 max-w-4xl">
+        <p
+          class="hero-text text-cream/80 font-mono text-sm tracking-widest mb-4 uppercase"
+        >
+          Precision Health Intelligence
+        </p>
+        <h1
+          class="hero-text font-jakarta font-bold text-5xl md:text-7xl lg:text-8xl text-cream leading-none mb-2"
+        >
+          Nature is the
+        </h1>
+        <h2
+          class="hero-text font-serif italic text-6xl md:text-8xl lg:text-9xl text-clay leading-none mb-8"
+        >
+          Algorithm.
+        </h2>
+        <p
+          class="hero-text text-cream/70 text-lg md:text-xl max-w-xl mb-10 font-light"
+        >
+          Decode your biology. Optimize your existence. Where ancient wisdom
+          meets clinical precision.
+        </p>
+        <div class="hero-text flex flex-wrap gap-4">
+          <button
+            class="magnetic-btn slide-bg bg-clay text-white px-8 py-4 rounded-full font-semibold text-lg"
+          >
+            Start Your Journey
+          </button>
+          <button
+            class="magnetic-btn border-2 border-cream/30 text-cream px-8 py-4 rounded-full font-semibold text-lg hover:bg-cream/10 transition-colors"
+          >
+            Watch Film
+          </button>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-cream/50"
+      >
+        <span class="text-xs font-mono tracking-widest">SCROLL</span>
+        <div
+          class="w-px h-12 bg-gradient-to-b from-cream/50 to-transparent"
+        ></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-32 px-8 md:px-16 bg-cream">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-20">
+          <p class="font-mono text-clay text-sm tracking-widest mb-4">
+            PRECISION MICRO-UI DASHBOARD
+          </p>
+          <h2
+            class="font-jakarta font-bold text-4xl md:text-6xl text-charcoal mb-6"
+          >
+            Clinical Intelligence,<br />
+            <span class="font-serif italic text-moss"
+              >Beautifully Delivered</span
+            >
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Card 1: Diagnostic Shuffler -->
+          <div
+            class="bg-white rounded-5xl p-8 shadow-xl relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-moss/5 rounded-full -translate-y-1/2 translate-x-1/2"
+            ></div>
+            <div class="relative">
+              <div
+                class="w-12 h-12 bg-moss/10 rounded-2xl flex items-center justify-center mb-6"
+              >
+                <i data-lucide="activity" class="w-6 h-6 text-moss"></i>
+              </div>
+              <h3 class="font-outfit font-bold text-xl text-charcoal mb-2">
+                Audit Intelligence
+              </h3>
+              <p class="text-charcoal/60 text-sm mb-8">
+                Real-time diagnostic analysis with predictive modeling.
+              </p>
+
+              <!-- Diagnostic Shuffler -->
+              <div class="relative h-48" id="shuffler-container">
+                <div
+                  class="shuffler-card absolute w-full bg-gradient-to-br from-moss to-moss/80 rounded-3xl p-6 text-white spring-bounce"
+                  style="z-index: 3; top: 0"
+                >
+                  <p class="font-mono text-xs text-white/60 mb-2">
+                    BIOMARKER ANALYSIS
+                  </p>
+                  <h4 class="font-outfit font-bold text-lg">Epigenetic Age</h4>
+                  <div class="flex items-end justify-between mt-4">
+                    <span class="text-3xl font-bold">32.4</span>
+                    <span class="text-xs text-white/60">years</span>
+                  </div>
+                  <div
+                    class="mt-4 h-1 bg-white/20 rounded-full overflow-hidden"
+                  >
+                    <div
+                      class="h-full bg-clay rounded-full"
+                      style="width: 72%"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  class="shuffler-card absolute w-full bg-white border-2 border-moss/10 rounded-3xl p-6 spring-bounce"
+                  style="z-index: 2; top: 12px"
+                >
+                  <p class="font-mono text-xs text-moss/60 mb-2">
+                    GUT HEALTH INDEX
+                  </p>
+                  <h4 class="font-outfit font-bold text-lg text-charcoal">
+                    Microbiome Score
+                  </h4>
+                  <div class="flex items-end justify-between mt-4">
+                    <span class="text-3xl font-bold text-moss">847</span>
+                    <span class="text-xs text-charcoal/40">/ 1000</span>
+                  </div>
+                </div>
+                <div
+                  class="shuffler-card absolute w-full bg-white border-2 border-moss/10 rounded-3xl p-6 spring-bounce"
+                  style="z-index: 1; top: 24px"
+                >
+                  <p class="font-mono text-xs text-moss/60 mb-2">
+                    STRESS RESPONSE
+                  </p>
+                  <h4 class="font-outfit font-bold text-lg text-charcoal">
+                    Cortisol Optimization
+                  </h4>
+                  <div class="flex items-end justify-between mt-4">
+                    <span class="text-3xl font-bold text-clay">94%</span>
+                    <span class="text-xs text-charcoal/40">optimal</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Neural Stream -->
+          <div
+            class="bg-white rounded-5xl p-8 shadow-xl relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-clay/5 rounded-full -translate-y-1/2 translate-x-1/2"
+            ></div>
+            <div class="relative">
+              <div
+                class="w-12 h-12 bg-clay/10 rounded-2xl flex items-center justify-center mb-6"
+              >
+                <i data-lucide="brain" class="w-6 h-6 text-clay"></i>
+              </div>
+              <h3 class="font-outfit font-bold text-xl text-charcoal mb-2">
+                Neural Stream
+              </h3>
+              <p class="text-charcoal/60 text-sm mb-8">
+                Live telemetry from your body's optimization protocols.
+              </p>
+
+              <!-- Telemetry Typewriter -->
+              <div class="bg-charcoal rounded-3xl p-6 font-mono text-sm">
+                <div class="flex items-center gap-2 mb-4">
+                  <div
+                    class="w-2 h-2 bg-green-400 rounded-full pulse-dot"
+                  ></div>
+                  <span class="text-green-400 text-xs">LIVE FEED</span>
+                </div>
+                <div class="space-y-3 text-cream/80">
+                  <p id="typewriter-1" class="typewriter-line">
+                    > Initializing neural pathways...
+                  </p>
+                  <p id="typewriter-2" class="typewriter-line text-cream/40">
+                    > Analyzing circadian rhythm...
+                  </p>
+                  <p id="typewriter-3" class="typewriter-line text-cream/40">
+                    > Optimizing sleep architecture...
+                  </p>
+                </div>
+                <div class="mt-6 flex items-center gap-2">
+                  <span class="text-clay">nura@health:~$</span>
+                  <span class="w-2 h-5 bg-clay cursor-blink"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Adaptive Regimen -->
+          <div
+            class="bg-white rounded-5xl p-8 shadow-xl relative overflow-hidden group"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-moss/5 rounded-full -translate-y-1/2 translate-x-1/2"
+            ></div>
+            <div class="relative">
+              <div
+                class="w-12 h-12 bg-moss/10 rounded-2xl flex items-center justify-center mb-6"
+              >
+                <i data-lucide="calendar-check" class="w-6 h-6 text-moss"></i>
+              </div>
+              <h3 class="font-outfit font-bold text-xl text-charcoal mb-2">
+                Adaptive Regimen
+              </h3>
+              <p class="text-charcoal/60 text-sm mb-8">
+                AI-optimized protocol scheduling that evolves with you.
+              </p>
+
+              <!-- Mock Cursor Protocol Scheduler -->
+              <div class="relative">
+                <div class="grid grid-cols-7 gap-2 mb-4">
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >S</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >M</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >T</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >W</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >T</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >F</span
+                  >
+                  <span class="text-center text-xs font-mono text-charcoal/40"
+                    >S</span
+                  >
+                </div>
+                <div class="grid grid-cols-7 gap-2" id="scheduler-grid">
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    12
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    13
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    14
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss text-white flex items-center justify-center text-sm font-semibold active-day"
+                  >
+                    15
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    16
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    17
+                  </div>
+                  <div
+                    class="scheduler-day aspect-square rounded-xl bg-moss/10 flex items-center justify-center text-sm font-semibold text-charcoal/40"
+                  >
+                    18
+                  </div>
+                </div>
+                <!-- Mock Cursor -->
+                <svg
+                  id="mock-cursor"
+                  class="absolute pointer-events-none"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style="top: 60px; left: 0"
+                >
+                  <path
+                    d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.48 0 .72-.58.38-.92L6.35 2.85a.5.5 0 0 0-.85.36Z"
+                    fill="#CC5833"
+                    stroke="#CC5833"
+                    stroke-width="1.5"
+                  />
+                </svg>
+                <button
+                  class="mt-4 w-full magnetic-btn bg-moss text-white py-3 rounded-2xl font-semibold text-sm"
+                >
+                  Save Protocol
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section
+      id="philosophy"
+      class="relative py-32 px-8 md:px-16 bg-charcoal overflow-hidden"
+    >
+      <!-- Parallax Background -->
+      <div class="absolute inset-0 opacity-20" id="philosophy-bg">
+        <img
+          src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1920&q=80"
+          alt="Organic Texture"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <div class="relative z-10 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <p class="font-mono text-clay text-sm tracking-widest mb-6">
+              OUR PHILOSOPHY
+            </p>
+            <h2
+              class="philosophy-text font-jakarta font-bold text-4xl md:text-5xl text-cream leading-tight mb-8"
+            >
+              Modern medicine asks:<br />
+              <span class="font-serif italic text-clay">What is wrong?</span>
+            </h2>
+            <p class="philosophy-text text-cream/60 text-lg leading-relaxed">
+              We believe in a different paradigm. One that doesn't wait for
+              disease to manifest, but instead seeks to understand the intricate
+              symphony of your biology at its peak.
+            </p>
+          </div>
+          <div>
+            <h2
+              class="philosophy-text font-jakarta font-bold text-4xl md:text-5xl text-cream leading-tight mb-8"
+            >
+              We ask:<br />
+              <span class="font-serif italic text-clay">What is optimal?</span>
+            </h2>
+            <p
+              class="philosophy-text text-cream/60 text-lg leading-relaxed mb-8"
+            >
+              Every cell, every system, every rhythm in your body has an optimal
+              state. Our mission is to help you discover and maintain that state
+              through precision health intelligence.
+            </p>
+            <div class="philosophy-text flex items-center gap-4">
+              <div
+                class="w-16 h-16 rounded-full bg-clay/20 flex items-center justify-center"
+              >
+                <i data-lucide="dna" class="w-8 h-8 text-clay"></i>
+              </div>
+              <div>
+                <p class="font-outfit font-bold text-cream">
+                  Epigenetic Optimization
+                </p>
+                <p class="text-cream/40 text-sm">
+                  Beyond genetics. Beyond lifestyle.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Protocol Section -->
+    <section id="protocol" class="py-32 px-8 md:px-16 bg-cream">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-20">
+          <p class="font-mono text-clay text-sm tracking-widest mb-4">
+            THE NURA PROTOCOL
+          </p>
+          <h2
+            class="font-jakarta font-bold text-4xl md:text-6xl text-charcoal mb-6"
+          >
+            Three Pillars of<br />
+            <span class="font-serif italic text-moss">Precision Health</span>
+          </h2>
+        </div>
+
+        <!-- Stacking Cards Container -->
+        <div class="relative space-y-8" id="protocol-stack">
+          <!-- Card 1: Double Helix -->
+          <div
+            class="protocol-card bg-white rounded-6xl p-12 shadow-2xl transition-all duration-500"
+            data-index="0"
+          >
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <span class="font-mono text-clay text-sm">01</span>
+                <h3
+                  class="font-outfit font-bold text-3xl text-charcoal mt-2 mb-4"
+                >
+                  Genomic Sequencing
+                </h3>
+                <p class="text-charcoal/60 text-lg leading-relaxed mb-6">
+                  Deep analysis of your genetic blueprint to identify
+                  predispositions, optimize medication responses, and unlock
+                  personalized health strategies.
+                </p>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Whole genome analysis</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Pharmacogenomic profiling</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Ancestral health insights</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="flex items-center justify-center">
+                <!-- Rotating Double Helix -->
+                <svg class="w-64 h-64 rotate-helix" viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient
+                      id="helixGrad"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" style="stop-color: #2e4036" />
+                      <stop offset="100%" style="stop-color: #cc5833" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M100 20 Q140 50 100 80 Q60 110 100 140 Q140 170 100 180"
+                    stroke="url(#helixGrad)"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M100 20 Q60 50 100 80 Q140 110 100 140 Q60 170 100 180"
+                    stroke="url(#helixGrad)"
+                    stroke-width="4"
+                    fill="none"
+                    opacity="0.5"
+                  />
+                  <circle cx="100" cy="20" r="8" fill="#2E4036" />
+                  <circle cx="100" cy="80" r="8" fill="#CC5833" />
+                  <circle cx="100" cy="140" r="8" fill="#2E4036" />
+                  <circle cx="100" cy="180" r="8" fill="#CC5833" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Laser Grid -->
+          <div
+            class="protocol-card bg-moss rounded-6xl p-12 shadow-2xl transition-all duration-500"
+            data-index="1"
+          >
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <span class="font-mono text-clay text-sm">02</span>
+                <h3 class="font-outfit font-bold text-3xl text-cream mt-2 mb-4">
+                  Microbiome Analysis
+                </h3>
+                <p class="text-cream/70 text-lg leading-relaxed mb-6">
+                  Comprehensive mapping of your gut ecosystem to optimize
+                  digestion, immunity, and even mental health through targeted
+                  interventions.
+                </p>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-cream/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-clay"></i>
+                    <span>Bacterial diversity scoring</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-cream/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-clay"></i>
+                    <span>Pathogen identification</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-cream/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-clay"></i>
+                    <span>Personalized probiotics</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="flex items-center justify-center">
+                <!-- Laser Grid Animation -->
+                <div
+                  class="relative w-64 h-64 bg-charcoal/20 rounded-3xl overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 grid grid-cols-8 grid-rows-8 gap-1 p-4"
+                  >
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/30 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/30 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/30 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/20 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                    <div class="bg-cream/30 rounded"></div>
+                    <div class="bg-cream/10 rounded"></div>
+                  </div>
+                  <div
+                    class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-clay to-transparent laser-scan"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: EKG Waveform -->
+          <div
+            class="protocol-card bg-white rounded-6xl p-12 shadow-2xl transition-all duration-500"
+            data-index="2"
+          >
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <span class="font-mono text-clay text-sm">03</span>
+                <h3
+                  class="font-outfit font-bold text-3xl text-charcoal mt-2 mb-4"
+                >
+                  Metabolic Optimization
+                </h3>
+                <p class="text-charcoal/60 text-lg leading-relaxed mb-6">
+                  Real-time monitoring and optimization of your metabolic
+                  processes, from mitochondrial function to hormonal balance.
+                </p>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Continuous glucose monitoring</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Hormone panel analysis</span>
+                  </li>
+                  <li class="flex items-center gap-3 text-charcoal/80">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-moss"></i>
+                    <span>Mitochondrial efficiency</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="flex items-center justify-center">
+                <!-- EKG Waveform -->
+                <svg class="w-64 h-32" viewBox="0 0 300 100">
+                  <path
+                    class="ekg-path"
+                    d="M0 50 L40 50 L50 50 L60 30 L70 70 L80 20 L90 80 L100 50 L110 50 L150 50 L160 50 L170 30 L180 70 L190 20 L200 80 L210 50 L220 50 L260 50 L270 50 L280 30 L290 70 L300 50"
+                    stroke="#CC5833"
+                    stroke-width="3"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Membership Section -->
+    <section id="membership" class="py-32 px-8 md:px-16 bg-cream">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-20">
+          <p class="font-mono text-clay text-sm tracking-widest mb-4">
+            MEMBERSHIP TIERS
+          </p>
+          <h2
+            class="font-jakarta font-bold text-4xl md:text-6xl text-charcoal mb-6"
+          >
+            Invest in Your<br />
+            <span class="font-serif italic text-moss">Optimal Self</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Tier 1: Essential -->
+          <div
+            class="bg-white rounded-6xl p-8 shadow-xl border-2 border-transparent hover:border-moss/20 transition-all duration-300"
+          >
+            <div class="mb-8">
+              <h3 class="font-outfit font-bold text-2xl text-charcoal mb-2">
+                Essential
+              </h3>
+              <p class="text-charcoal/60">Foundation health intelligence</p>
+            </div>
+            <div class="mb-8">
+              <span class="font-jakarta font-bold text-5xl text-charcoal"
+                >$149</span
+              >
+              <span class="text-charcoal/40">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Quarterly biomarker analysis</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Basic genomic insights</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>App dashboard access</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Email support</span>
+              </li>
+            </ul>
+            <button
+              class="w-full magnetic-btn border-2 border-moss text-moss py-4 rounded-full font-semibold hover:bg-moss hover:text-white transition-colors"
+            >
+              Get Started
+            </button>
+          </div>
+
+          <!-- Tier 2: Performance (Featured) -->
+          <div
+            class="bg-moss rounded-6xl p-8 shadow-2xl transform md:-translate-y-4 relative overflow-hidden"
+          >
+            <div
+              class="absolute top-4 right-4 bg-clay text-white text-xs font-bold px-3 py-1 rounded-full"
+            >
+              POPULAR
+            </div>
+            <div class="mb-8">
+              <h3 class="font-outfit font-bold text-2xl text-cream mb-2">
+                Performance
+              </h3>
+              <p class="text-cream/70">Advanced optimization protocols</p>
+            </div>
+            <div class="mb-8">
+              <span class="font-jakarta font-bold text-5xl text-cream"
+                >$349</span
+              >
+              <span class="text-cream/50">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center gap-3 text-cream/90">
+                <i data-lucide="check" class="w-5 h-5 text-clay"></i>
+                <span>Monthly biomarker analysis</span>
+              </li>
+              <li class="flex items-center gap-3 text-cream/90">
+                <i data-lucide="check" class="w-5 h-5 text-clay"></i>
+                <span>Full genomic sequencing</span>
+              </li>
+              <li class="flex items-center gap-3 text-cream/90">
+                <i data-lucide="check" class="w-5 h-5 text-clay"></i>
+                <span>Microbiome mapping</span>
+              </li>
+              <li class="flex items-center gap-3 text-cream/90">
+                <i data-lucide="check" class="w-5 h-5 text-clay"></i>
+                <span>Priority support</span>
+              </li>
+              <li class="flex items-center gap-3 text-cream/90">
+                <i data-lucide="check" class="w-5 h-5 text-clay"></i>
+                <span>Personal health coach</span>
+              </li>
+            </ul>
+            <button
+              class="w-full magnetic-btn bg-clay text-white py-4 rounded-full font-semibold hover:bg-clay/90 transition-colors"
+            >
+              Get Started
+            </button>
+          </div>
+
+          <!-- Tier 3: Elite -->
+          <div
+            class="bg-white rounded-6xl p-8 shadow-xl border-2 border-transparent hover:border-moss/20 transition-all duration-300"
+          >
+            <div class="mb-8">
+              <h3 class="font-outfit font-bold text-2xl text-charcoal mb-2">
+                Elite
+              </h3>
+              <p class="text-charcoal/60">Concierge health intelligence</p>
+            </div>
+            <div class="mb-8">
+              <span class="font-jakarta font-bold text-5xl text-charcoal"
+                >$799</span
+              >
+              <span class="text-charcoal/40">/month</span>
+            </div>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Weekly biomarker analysis</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Everything in Performance</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>24/7 physician access</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Home phlebotomy service</span>
+              </li>
+              <li class="flex items-center gap-3 text-charcoal/80">
+                <i data-lucide="check" class="w-5 h-5 text-moss"></i>
+                <span>Custom supplement protocol</span>
+              </li>
+            </ul>
+            <button
+              class="w-full magnetic-btn border-2 border-moss text-moss py-4 rounded-full font-semibold hover:bg-moss hover:text-white transition-colors"
+            >
+              Contact Sales
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal rounded-t-[4rem] px-8 md:px-16 pt-20 pb-12">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-12 mb-16">
+          <div>
+            <h4 class="font-outfit font-bold text-2xl text-cream mb-4">NURA</h4>
+            <p class="text-cream/50 text-sm leading-relaxed">
+              Precision health intelligence for the optimally minded.
+            </p>
+            <div class="flex items-center gap-2 mt-6">
+              <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+              <span class="text-green-400 text-xs font-mono"
+                >SYSTEM OPERATIONAL</span
+              >
+            </div>
+          </div>
+          <div>
+            <h5 class="font-outfit font-semibold text-cream mb-4">Platform</h5>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Biomarkers</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Genomics</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Protocols</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="font-outfit font-semibold text-cream mb-4">Company</h5>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >About</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Research</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Press</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="font-outfit font-semibold text-cream mb-4">Legal</h5>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Privacy</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Terms</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >HIPAA</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-cream/50 hover:text-cream transition-colors text-sm"
+                  >Security</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="border-t border-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
+        >
+          <p class="text-cream/30 text-sm">
+            © 2024 Nura Health. All rights reserved.
+          </p>
+          <div class="flex items-center gap-6">
+            <a
+              href="#"
+              class="text-cream/30 hover:text-cream transition-colors"
+            >
+              <i data-lucide="twitter" class="w-5 h-5"></i>
+            </a>
+            <a
+              href="#"
+              class="text-cream/30 hover:text-cream transition-colors"
+            >
+              <i data-lucide="linkedin" class="w-5 h-5"></i>
+            </a>
+            <a
+              href="#"
+              class="text-cream/30 hover:text-cream transition-colors"
+            >
+              <i data-lucide="instagram" class="w-5 h-5"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Initialize Lucide Icons
+      lucide.createIcons();
+
+      // Register GSAP ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Navbar Scroll Effect
+      const navbar = document.getElementById("navbar");
+      const logo = document.getElementById("logo");
+      const navLinks = document.querySelectorAll(".nav-link");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 100) {
+          navbar.classList.add("glass", "border", "border-white/20");
+          logo.classList.add("text-moss");
+          logo.classList.remove("text-cream");
+          navLinks.forEach((link) => {
+            link.classList.add("text-moss");
+            link.classList.remove("text-cream");
+          });
+        } else {
+          navbar.classList.remove("glass", "border", "border-white/20");
+          logo.classList.remove("text-moss");
+          logo.classList.add("text-cream");
+          navLinks.forEach((link) => {
+            link.classList.remove("text-moss");
+            link.classList.add("text-cream");
+          });
+        }
+      });
+
+      // Hero Animations
+      gsap.from(".hero-text", {
+        y: 60,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+      });
+
+      // Diagnostic Shuffler
+      const shufflerCards = document.querySelectorAll(".shuffler-card");
+      let shufflerIndex = 0;
+
+      setInterval(() => {
+        shufflerCards.forEach((card, i) => {
+          const newIndex = (i + shufflerIndex) % 3;
+          card.style.zIndex = 3 - newIndex;
+          card.style.top = `${newIndex * 12}px`;
+        });
+        shufflerIndex = (shufflerIndex + 1) % 3;
+      }, 3000);
+
+      // Telemetry Typewriter
+      const typewriterMessages = [
+        "> Optimizing Circadian Rhythm...",
+        "> Analyzing Sleep Architecture...",
+        "> Calibrating Neural Pathways...",
+        "> Processing Biometric Data...",
+        "> Synchronizing Health Metrics...",
+      ];
+
+      let typewriterIndex = 0;
+      const typewriterElement = document.getElementById("typewriter-1");
+
+      setInterval(() => {
+        typewriterIndex = (typewriterIndex + 1) % typewriterMessages.length;
+        typewriterElement.style.opacity = 0;
+        setTimeout(() => {
+          typewriterElement.textContent = typewriterMessages[typewriterIndex];
+          typewriterElement.style.opacity = 1;
+        }, 300);
+      }, 3000);
+
+      // Mock Cursor Animation
+      const mockCursor = document.getElementById("mock-cursor");
+      const schedulerDays = document.querySelectorAll(".scheduler-day");
+
+      function animateCursor() {
+        const timeline = gsap.timeline();
+
+        // Move to Wednesday (index 3)
+        timeline.to(mockCursor, {
+          left: "calc(3 * (100% / 7) + 20px)",
+          top: "60px",
+          duration: 0.8,
+          ease: "power2.inOut",
+        });
+
+        // Click effect
+        timeline.to(schedulerDays[3], {
+          scale: 0.9,
+          duration: 0.1,
+          yoyo: true,
+          repeat: 1,
+        });
+
+        // Move to Save button
+        timeline.to(mockCursor, {
+          left: "50%",
+          top: "180px",
+          duration: 0.6,
+          ease: "power2.inOut",
+        });
+
+        // Fade out
+        timeline.to(mockCursor, {
+          opacity: 0,
+          duration: 0.3,
+        });
+
+        // Reset
+        timeline.set(mockCursor, {
+          left: 0,
+          top: "60px",
+          opacity: 1,
+          delay: 1,
+        });
+      }
+
+      // Run cursor animation every 5 seconds
+      animateCursor();
+      setInterval(animateCursor, 5000);
+
+      // Philosophy Parallax
+      gsap.to("#philosophy-bg", {
+        yPercent: 30,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#philosophy",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // Philosophy Text Reveal
+      gsap.from(".philosophy-text", {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: "#philosophy",
+          start: "top 70%",
+        },
+      });
+
+      // Protocol Stacking Cards
+      const protocolCards = document.querySelectorAll(".protocol-card");
+
+      protocolCards.forEach((card, index) => {
+        if (index < protocolCards.length - 1) {
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top top",
+            endTrigger: protocolCards[protocolCards.length - 1],
+            end: "top top",
+            pin: true,
+            pinSpacing: false,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              const scale = 1 - progress * 0.1;
+              const blur = progress * 20;
+              const opacity = 1 - progress * 0.5;
+
+              card.style.transform = `scale(${Math.max(scale, 0.9)})`;
+              card.style.filter = `blur(${Math.min(blur, 20)}px)`;
+              card.style.opacity = Math.max(opacity, 0.5);
+            },
+          });
+        }
+      });
+
+      // Smooth scroll for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
