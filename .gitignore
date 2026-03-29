@@ -47,4 +47,4 @@ Release/
 Thumbs.db
 
 # Notepad Notes
-.txt
+*.txt
